@@ -9,17 +9,30 @@
 
 
 import random
+import re
+
 
 def main(args):
-	#read text from stdin, trim trailing newline, and split into a list
-	#at word boundaries
-	words = sys.stdin.read()[:-1].split(" ")
+	#split into list of words, punctuation, and whitespace
+	words = re.findall(r"\w+|[^\w]|\s", sys.stdin.read()[:-1], 
+	re.UNICODE)
+	
 	for word in words:
-		letters = list(word)
-		middle = letters[1:-1]
-		random.shuffle(middle)
-		print(str(letters[0]) + "".join(middle) + str(letters[-1]),
-		end = " ")
+		#scramble if solely alphabetic and longer than 3 characters
+		if re.fullmatch('^[a-zA-Z]{4,}$', word):
+			#split  word to char list
+			letters = list(word)
+			
+			middle = letters[1:-1]
+			random.shuffle(middle)
+			
+			#reconcatenate first     middle            last letters
+			word = str(letters[0]) + "".join(middle) + str(letters[-1])
+		
+		#print 
+		print(word, end = "")
+		
+	print('')
 			
 	
 	return 0
